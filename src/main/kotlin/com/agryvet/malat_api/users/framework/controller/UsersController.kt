@@ -1,6 +1,7 @@
 package com.agryvet.malat_api.users.framework.controller
 
 import com.agryvet.malat_api.users.entities.User
+import com.agryvet.malat_api.users.entities.exceptions.UserNotFoundException
 import com.agryvet.malat_api.users.framework.controller.request.UserDto
 import com.agryvet.malat_api.users.framework.service.UsersService
 import org.springframework.http.ResponseEntity
@@ -23,8 +24,8 @@ class UsersController(private val usersService: UsersService) {
 
     @GetMapping("/{userId}")
     fun getUserById(@PathVariable userId: Int): User {
-        println("")
-        return usersService.getUserById(userId)
+        val user = usersService.getUserById(userId) ?: throw UserNotFoundException("User not found with id: $userId")
+        return user
     }
 
     @PostMapping

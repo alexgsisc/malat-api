@@ -20,8 +20,8 @@ class UsersService {
         return users
     }
 
-    fun getUserById(id: Int): User {
-        return users.find { it.id == id }!!
+    fun getUserById(id: Int): User? {
+        return users.firstOrNull { it.id == id }
     }
 
     fun addUser(user: UserDto): User {
