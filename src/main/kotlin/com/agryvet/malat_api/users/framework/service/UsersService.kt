@@ -29,4 +29,8 @@ class UsersService {
         users.addLast(newUser)
         return newUser
     }
+
+    fun deleteUser(userId: Int) {
+        users.removeIf { it.id == userId }
+    }
 }

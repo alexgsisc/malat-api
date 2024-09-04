@@ -4,7 +4,9 @@ import com.agryvet.malat_api.users.entities.User
 import com.agryvet.malat_api.users.entities.exceptions.UserNotFoundException
 import com.agryvet.malat_api.users.framework.controller.request.UserDto
 import com.agryvet.malat_api.users.framework.service.UsersService
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -29,7 +31,7 @@ class UsersController(private val usersService: UsersService) {
     }
 
     @PostMapping
-    fun addUser(@RequestBody user: UserDto): ResponseEntity<User> {
+    fun addUser(@Valid @RequestBody user: UserDto): ResponseEntity<User> {
         val saveUser = usersService.addUser(user)
 
         val uriLocation = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -37,5 +39,10 @@ class UsersController(private val usersService: UsersService) {
             .buildAndExpand(saveUser.id)
             .toUri()
         return ResponseEntity.created(uriLocation).build()
+    }
+
+    @DeleteMapping("/{userId}")
+    fun deleteUserById(@PathVariable userId: Int) {
+        usersService.deleteUser(userId)
     }
 }
