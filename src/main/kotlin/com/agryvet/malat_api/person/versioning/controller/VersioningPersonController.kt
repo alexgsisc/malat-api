@@ -39,4 +39,15 @@ class VersioningPersonController {
         return PersonV2("Bob", "Charlie")
     }
 
+
+    @GetMapping(path = ["/person/accept"], produces = ["application/vnd.name-company.app-v1+json"])
+    fun getFirstVersionByAcceptHeader(): PersonV1 {
+        return PersonV1("Bob Charlie")
+    }
+
+    @GetMapping(path = ["/person/accept"], produces = ["application/vnd.name-company.app-v2+json"])
+    fun getSecondVersionByAcceptHeader(): PersonV2 {
+        return PersonV2("Bob", "Charlie")
+    }
+
 }
