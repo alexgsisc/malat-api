@@ -5,6 +5,10 @@ import com.agryvet.malat_api.users.entities.exceptions.UserNotFoundException
 import com.agryvet.malat_api.users.framework.controller.request.UserDto
 import com.agryvet.malat_api.users.framework.service.UsersService
 import jakarta.validation.Valid
+import org.springframework.hateoas.EntityModel
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn
+import org.springframework.hateoas.server.mvc.linkTo
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -45,4 +49,18 @@ class UsersController(private val usersService: UsersService) {
     fun deleteUserById(@PathVariable userId: Int) {
         usersService.deleteUser(userId)
     }
+
+    //WebMVCLinkBuilder
+    @GetMapping("/retrieve/{userId}")
+    fun retrieveUsersById(@PathVariable userId: Int): EntityModel<User> {
+        val user = usersService.getUserById(userId) ?: throw UserNotFoundException("User not found with id: $userId")
+        val entityModel: EntityModel<User> = EntityModel.of(user)
+
+        val linkBuilder: WebMvcLinkBuilder = WebMvcLinkBuilder.linkTo(methodOn(this::class.java).getAllUsers())
+
+        entityModel.add(linkBuilder.withRel("all-users"))
+
+        return entityModel
+    }
+
 }
