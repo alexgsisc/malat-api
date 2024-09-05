@@ -29,4 +29,14 @@ class VersioningPersonController {
         return PersonV2("Bob", "Charlie")
     }
 
+    @GetMapping(path = ["/person/header"], headers = ["X-API-VERSION=1"])
+    fun getFirstVersionByRequestHeader(): PersonV1 {
+        return PersonV1("Bob Charlie")
+    }
+
+    @GetMapping(path = ["/person/header"], headers = ["X-API-VERSION=2"])
+    fun getSecondVersionByRequestHeader(): PersonV2 {
+        return PersonV2("Bob", "Charlie")
+    }
+
 }
