@@ -1,5 +1,6 @@
 package com.agryvet.malat_api.users.framework.controller
 
+import com.agryvet.malat_api.users.entities.Posts
 import com.agryvet.malat_api.users.entities.User
 import com.agryvet.malat_api.users.entities.exceptions.UserNotFoundException
 import com.agryvet.malat_api.users.framework.controller.request.UserDto
@@ -71,6 +72,17 @@ class UserWithJPAController(private val repository: UserRepository) {
     @DeleteMapping("/{userId}")
     fun deleteUserById(@PathVariable userId: Int) {
         repository.deleteById(userId)
+    }
+
+    @GetMapping("/{userId}/posts")
+    fun getRetrievePostsForUser(@PathVariable userId: Int): List<Posts> {
+        val user: Optional<User> = repository.findById(userId)
+
+        if (user.isEmpty) {
+            throw UserNotFoundException("User not found with id: $userId")
+        }
+
+        return user.get().posts ?: throw UserNotFoundException("User not found with id: $userId")
     }
 
 
