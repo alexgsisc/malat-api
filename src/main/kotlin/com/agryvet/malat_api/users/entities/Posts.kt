@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
+import jakarta.validation.constraints.NotBlank
 
 @Entity
 data class Posts(
@@ -14,9 +15,10 @@ data class Posts(
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Int? = null,
 
+    @field:NotBlank(message = "Name is required")
     val description: String,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    val user: User
+    var user: User? = null
 )
